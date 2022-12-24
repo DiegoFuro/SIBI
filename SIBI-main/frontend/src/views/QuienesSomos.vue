@@ -33,7 +33,8 @@
         <br>¿Nunca has tenido el problema de querer encontrar música nueva, pero no sabes por donde empezar y te abrumas?
         Tan solo tienes que pulsar sobre el botón "Recomendacion aleatoria" si quieres descubir música completamente nueva, de diferentes géneros y artistas.<br>
         <br>
-        Podrás ver a que género pertenece, quién la canta, su portada y podrás escuchar una preview.  
+        Nuestra aplicación de recomendación de música y artistas es una plataforma en línea diseñada para brindar a nuestros usuarios una experiencia de descubrimiento y reproducción de música personalizada y relevante.
+        Utilizamos algoritmos de recomendación avanzados para analizar las preferencias y el historial de reproducción de cada usuario y sugerir canciones y artistas que creemos que disfrutarán.
         Si quieres buscar alguna canción de un género o artista en concreto, o con alguna palabra en su nombre, selecciona los parámetros que deseas y pulsa sobre el botón "Buscar".<br>
         Puedes ordenar los resultados obtenidos por diferentes variables como bailabilidad, positividad, emocion etc..<br>
         Si quieres una recomendación personalizada basada en tus gustos, solo tienes que pulsar sobre el botón "Recomendacion personalizada".<br>
@@ -42,7 +43,8 @@
         Siempre que te guste una canción podrás guardarla en tu lista de favoritos pulsando sobre el botón del corazón.<br>
         Puedes acceder a tu lista de canciones favoritas pulsando sobre el botón del corazón de la barra superior, también podras ver las canciones que has metido en odiadas.<br>
         
-        La música que metas en odiadas nunca más se te recomendará, e intentará que los artistas y generos de esas canciones aparezcan lo menos posible en tus recomendaciones.
+        La música que metas en odiadas nunca más se te recomendará, e intentará que los artistas y generos de esas canciones aparezcan lo menos posible en tus recomendaciones. <br>
+        En resumen, somos una aplicación de recomendación de música y artistas comprometida con ofrecer a nuestros usuarios una experiencia de descubrimiento y reproducción de música personalizada y relevante, mientras apoyamos a los artistas y promovemos el descubrimiento de nuevo talento.
         <br><br>¡Conoce mucha música nueva y diviértete!<br>
       </v-card-subtitle>
 

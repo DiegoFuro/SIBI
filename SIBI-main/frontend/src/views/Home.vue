@@ -197,22 +197,31 @@
               <v-col v-for="(song, i) in songs" :key="i" cols="flex">
                 <v-card :color="song.color" dark>
                   <!-- Ponemos los datos de la canción -->
-                  <div class="d-flex flex-no-wrap justify-space-between">
-                    <div>
-                      <v-card-title
+                  <div class="d-flex ">
+                    <div> 
+                    
+                          <v-avatar class="ma-3" size="125" tile>
+                            <v-img :src="song.cover"></v-img>
+                          </v-avatar>
+                      
+                      
+                    </div>
+                    <table height="50%">
+                      <tr>
+                        <td align="left">
+                       <v-card-title
                         class="headline"
                         v-text="song.name"
                       ></v-card-title>
                       <v-card-subtitle v-text="song.artist"></v-card-subtitle>
                       <v-card-text v-text="song.genre"></v-card-text>
-                    </div>
-                    <table height="50%">
-                      <tr>
-                        <td valign="middle" align="center">
+                        </td>
+                        
+                        <td style="padding-left: 600px" align="right">
                           <iframe :src="song.preview" width="300" height="80" margin="10px" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                         </td>
                         <td valign="middle" align="center">
-                          <span style="color:transparent">holaaaa</span>
+                          <span style="color:transparent">ho</span>
                           <!-- Botón Dislike -->
                           <v-btn icon @click="addDislike(song)">
                             <v-icon> {{ song.iconD }} </v-icon>
@@ -221,15 +230,12 @@
                           <v-btn icon @click="addFavs(song)">
                             <v-icon> {{ song.iconF }} </v-icon>
                           </v-btn>
-                          <span style="color:transparent">holaaaa</span>
+                          <span style="color:transparent">ho</span>
                         </td>
-                        <td valign="middle" align="center">
-                          <v-avatar class="ma-3" size="125" tile>
-                            <v-img :src="song.cover"></v-img>
-                          </v-avatar>
-                        </td>
+                      
                       </tr>
                     </table>
+                    
                   </div>
                 </v-card>
               </v-col>          
@@ -279,6 +285,7 @@
         hateds: [],
         historial: [],
         usuariosVecinos: [],
+        vecinosSongs: [],
         vecinosDepurados: [],
         songsNoDepuradas: [],
         songsDepuradas: [],
@@ -727,7 +734,10 @@
           }else{
             this.favs = respuesta.data;
           }
+          
         });
+        console.log("cada vez");
+          console.log(this.favs);
       },
 
       /****** GET HATEDS ******/
@@ -902,9 +912,11 @@
 
       /****** COLABORATIVE FILTER ******/
       colaborativeFilter: function(){
+        this.songs = [];
         console.log("Estamos en la función COLABORATIVE FILTER Máximo de 5 canciones recomendadas");   
         // 1. Guardamos las canciones favoritas del usuario Principal
         var oldFavs = this.favs.length;
+        this.rellenar();
         this.getFavs();
         setTimeout(() =>{
           console.log(this.favs);
@@ -927,8 +939,8 @@
                 }  
               }
               //Recomendamos las 5 canciones con más coincidencias                 
-              for(var i = 0; i < this.songsDepuradas.length; i++){
-                this.songs.push(this.songsDepuradas[i]);
+              for(var i = 0; i < this.vecinosSongs.length; i++){
+                this.songs.push(this.vecinosSongs[i]);
                 this.songs[i].color = this.colors[this.num];
                 this.songs[i].iconF = 'mdi-heart-outline';
                 this.songs[i].iconD = 'mdi-thumb-down-outline';
@@ -962,21 +974,13 @@
                         this.reordenarRecomendacion();
                         //Ponemos color a las canciones
                         this.num = 0;  
-                        if(this.songsDepuradas.length > 5){
-                          this.visible = true;
-                          alert("Mostrando las 5 canciones más recomendadas ordenadas de más a menos recomendadas. Pulsa el botón 'Mostrar Más' para ver todas las canciones recomendadas.");
-                        }
-                        else{
-                          if(this.songsDepuradas.length >= 1){
-                            alert("Mostrando las canciones más recomendadas ordenadas de más a menos recomendadas. Sigue descubriendo música para obtener más recomendaciones.");
-                          }
-                          else{
-                            alert("No hay canciones recomendadas para ti. prok");
-                          }  
-                        }
-                        //Recomendamos las 5 canciones con más coincidencias                 
-                        for(var i = 0; i < this.songsDepuradas.length; i++){
-                          this.songs.push(this.songsDepuradas[i]);
+                        
+                        //Recomendamos las 5 canciones con más coincidencias
+                        console.log("final");       
+                        alert("Mostrando las 5 canciones más recomendadas ordenadas de más a menos recomendadas. Pulsa el botón 'Mostrar Más' para ver todas las canciones recomendadas.");
+                        console.log(this.vecinosSongs)
+                        for(var i = 0; i < this.vecinosSongs.length; i++){
+                          this.songs.push(this.vecinosSongs[i]);
                           this.songs[i].color = this.colors[this.num];
                           this.songs[i].iconF = 'mdi-heart-outline';
                           this.songs[i].iconD = 'mdi-thumb-down-outline';
@@ -999,6 +1003,27 @@
         console.log("Salimos de la función COLABORATIVE FILTER");
       },
 
+      rellenar(){
+        axios.post(direccionIp + "/getVecinosSongs",{ 
+            usuario: "paula", 
+            
+        }).then(respuesta => {
+          this.num = 0;
+        for (var i = 0; i < respuesta.data.length; i++) {
+          this.vecinosSongs.push(respuesta.data[i]);
+          this.vecinosSongs[i].color = this.colors[this.num];
+          this.vecinosSongs[i].iconF = 'mdi-heart';
+          this.vecinosSongs[i].iconD = 'mdi-thumb-down-outline';
+          this.num = this.num + 1;
+          if (this.num == this.colors.length) {
+            this.num = 0;
+          }
+        }
+        });
+        console.log("que tal");
+        console.log(this.vecinosSongs);
+      },
+
       /****** BUSCAR USUARIOS VECINOS ******/
       getAllRecommendSongs(){
         console.log("Mostrar todas las recomendaciones");
@@ -1018,6 +1043,7 @@
 
       /****** BUSCAR USUARIOS VECINOS ******/
       buscarUsuariosVecinos(){
+        console.log("californication");
         for(var i = 0; i < this.favs.length; i++){
           axios.post(direccionIp + "/getNeighbours",  {
             name: this.favs[i].name,
@@ -1147,7 +1173,7 @@
       /****** REORDENAR RECOMENDACIÓN ******/
       reordenarRecomendacion() {
         console.log("Reordenamos las canciones");
-        this.songsDepuradas.sort(function (a, b) {
+        this.songsNoDepuradas.sort(function (a, b) {
           if (a.num < b.num) {
             return 1;
           }

@@ -484,7 +484,7 @@ app.post("/getSongsColaborativeFilter",(req,res)=>{
 });
 
 /****** GET NEIGHBOURS ******/
-app.post("/ hbours", function(req, res) {
+app.post("/getNeighbours", function(req, res) {
   console.log("ENTRO en Detectar Vecinos");
   const session = driver.session();
   console.log(req.body.name);
@@ -561,6 +561,52 @@ app.post("/getFavs", function (req, res) {
   })
   console.log("SALGO de /getFavs\n\n");
 });
+
+/****** GET FAVORITAS ******/
+app.post("/getVecinosSongs", function (req, res) {
+  console.log("ENTRO en /getVecinosSongs\n\n");
+  var favoritas = [];
+  var usuario = req.body.usuario;
+  var query = "MATCH (u:Usuario)-[rel:LIKES]->(c:Canciones) WHERE u.usuario='" + usuario + "' ";
+  query += "return c.name, c.artist, c.genre, c.cover, c.preview, c.danceability, c.energy, c.popularity, c.valence";
+  const session = driver.session();
+  const resultPromise = session.run(query);
+  resultPromise.then(result => {   
+    if (result.records.length == 0) {
+      res.json({
+        msg: 'Error'
+      })
+    }
+    else {
+      for(var i = 0; i < result.records.length; i++){
+        var cancion = {
+          name: result.records[i]._fields[0],
+          artist: result.records[i]._fields[1],
+          genre: result.records[i]._fields[2],
+          cover: result.records[i]._fields[3],
+          preview: result.records[i]._fields[4],
+          danceability: result.records[i]._fields[5],
+          energy: result.records[i]._fields[6],
+          popularity: result.records[i]._fields[7],
+          valence: result.records[i]._fields[8],
+        }
+        console.log(cancion);
+        favoritas.push(cancion);
+      }
+      res.send(favoritas)
+    }
+    session.close();
+  })
+  .catch((error) => {
+    res.json({
+      msg: 'Error'
+    });
+    console.log(error)
+    session.close();
+  })
+  console.log("SALGO de /getVecinosSongs\n\n");
+});
+
 
 /****** GET HATEDS ******/
 app.post("/getHateds", function (req, res) {
