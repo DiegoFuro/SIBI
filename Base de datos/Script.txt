@@ -1,0 +1,24 @@
+Cargar todos los datos:
+
+LOAD CSV WITH HEADERS FROM 'file:///baseDatosMusica.csv' AS line WITH line
+LIMIT 1000
+MERGE (s:Style {name: "Estilos Musicales"})
+MERGE (c:Canciones { name: line.TrackName, artist: line.ArtistName, genre:
+line.Genre, energy: toInteger(line.Energy), danceability: toInteger(line.Danceability),
+valence: toInteger(line.Valence), popularity: toInteger(line.Popularity), cover:
+line.TrackCover, preview: line.TrackPreview})
+FOREACH (n IN (CASE WHEN line.ArtistName IS NULL THEN [] ELSE [1] END) |
+MERGE (a:ArtistName {name: line.ArtistName})
+MERGE (a)-[:MADE]->(c)
+FOREACH (m IN (CASE WHEN line.Genre IS NULL THEN [] ELSE [1] END) |
+MERGE (g:Genre {name: line.Genre})
+MERGE (g)-[:GENRE_SINGED]->(a)
+MERGE (s)-[:IS_STYLE]->(g)
+)
+) 
+
+
+
+Visualizar la base de datos:
+
+match (n) return n
