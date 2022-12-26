@@ -934,9 +934,7 @@
                 if(this.songsDepuradas.length >= 1){
                   alert("Mostrando las canciones más recomendadas ordenadas de más a menos recomendadas. Sigue descubriendo música para obtener más recomendaciones.");
                 }
-                else{
-                  alert("No hay canciones recomendadas para ti. jincho");
-                }  
+               
               }
               //Recomendamos las 5 canciones con más coincidencias                 
               for(var i = 0; i < this.vecinosSongs.length; i++){
@@ -1006,7 +1004,7 @@
       rellenar(){
         axios.post(direccionIp + "/getVecinosSongs",{ 
             usuario: "paula", 
-            
+      
         }).then(respuesta => {
           this.num = 0;
         for (var i = 0; i < respuesta.data.length; i++) {
